@@ -13,12 +13,13 @@ class SRTConfig:
     highlightColor: String - Color of the highlight
     fileFormat: "srt" | "itt" - Format of the file
     '''
-    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "yellow", fileFormat="srt", gap=3):
+    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "red", fileFormat="srt", gap=3, frame_rate=24):
         self.wordsPerLine = wordsPerLine
         self.highlightWord = highlightWord
         self.highlightColor = highlightColor
         self.fileFormat = fileFormat
         self.gap = gap
+        self.frame_rate = frame_rate
 
 
 def save_word_segments_to_json(word_segments, file_path):
