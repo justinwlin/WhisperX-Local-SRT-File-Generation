@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/justinwlin/WhisperXSRTGenerator
 	branch = main
-	commit = 4bdb956064c7bc42626950ceadc6aae44f3a8380
-	parent = 08f5351170cf07d8f146ab91c5eeb95acd09e878
+	commit = 81906567dc85132812a35ada397ca7386310ed60
+	parent = 011390d467f5aad0cf2a727568b6126af2afcc53
 	method = merge
 	cmdver = 0.4.6
