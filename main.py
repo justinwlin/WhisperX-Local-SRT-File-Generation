@@ -7,10 +7,18 @@ from WhisperXSRTGenerator.SRTWriter import SRTConverter
 from runpod_whisperx_serverless_clientside_code.runpod_client_helper import convert_to_mono_mp3
 
 class SRTConfig:
-    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "yellow"):
+    '''
+    wordsPerLine: Integer - Number of words per line
+    highlightWord: Boolean - Highlight the word
+    highlightColor: String - Color of the highlight
+    fileFormat: "srt" | "itt" - Format of the file
+    '''
+    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "yellow", fileFormat="srt"):
         self.wordsPerLine = wordsPerLine
         self.highlightWord = highlightWord
         self.highlightColor = highlightColor
+        self.fileFormat = fileFormat
+
 
 def save_word_segments_to_json(word_segments, file_path):
     with open(file_path, 'w') as json_file:
@@ -37,6 +45,7 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
     audio_file_no_extension = os.path.splitext(audio_file)[0]
     mono_audio_path = "mono-" + audio_file
     srt_audio_path = "srt-" + audio_file_no_extension + ".srt"
+    itt_audio_path = "itt-" + audio_file_no_extension + ".itt"
     json_cache_path = audio_file + ".json"
 
     # Check if the mono_audio_path exists if not create it
@@ -73,14 +82,21 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
 
     # Apply highlight word effect if asked for it
     srtString = ''
-    if srtConfig.highlightWord:
+    if srtConfig.highlightWord and srtConfig.fileFormat == "srt":
         srtString = srtConverter.to_srt_highlight_word(color=srtConfig.highlightColor)
+    elif srtConfig.highlightWord and srtConfig.fileFormat=="itt":
+        srtString = srtConverter.to_itt_highlight_word(color=srtConfig.highlightColor)
     else:
         srtString = srtConverter.to_srt_plain_text()
     # Convert to SRT file
-    srtConverter.write_to_file(srt_audio_path, srtString)
-    print("Finished converting audio to SRT file")
+    if(srtConfig.fileFormat == "srt"):
+        print("Writing to ...srt file")
+        srtConverter.write_to_file(srt_audio_path, srtString)
+    elif(srtConfig.fileFormat == "itt"):
+        print("Writing to ...itt file")
+        srtConverter.write_to_file(itt_audio_path, srtString)
+    print("Finished converting audio to captioning file")
 
 
 if __name__ == "__main__":
-    main("reel1.wav", SRTConfig())
+    main("reel1.wav", SRTConfig(highlightWord=True, fileFormat="srt"))
