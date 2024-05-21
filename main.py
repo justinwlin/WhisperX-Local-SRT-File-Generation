@@ -13,11 +13,12 @@ class SRTConfig:
     highlightColor: String - Color of the highlight
     fileFormat: "srt" | "itt" - Format of the file
     '''
-    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "yellow", fileFormat="srt"):
+    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "yellow", fileFormat="srt", gap=3):
         self.wordsPerLine = wordsPerLine
         self.highlightWord = highlightWord
         self.highlightColor = highlightColor
         self.fileFormat = fileFormat
+        self.gap = gap
 
 
 def save_word_segments_to_json(word_segments, file_path):
@@ -83,9 +84,9 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
     # Apply highlight word effect if asked for it
     srtString = ''
     if srtConfig.highlightWord and srtConfig.fileFormat == "srt":
-        srtString = srtConverter.to_srt_highlight_word(color=srtConfig.highlightColor)
+        srtString = srtConverter.to_srt_highlight_word(color=srtConfig.highlightColor, gap=srtConfig.gap)
     elif srtConfig.highlightWord and srtConfig.fileFormat=="itt":
-        srtString = srtConverter.to_itt_highlight_word(color=srtConfig.highlightColor)
+        srtString = srtConverter.to_itt_highlight_word(color=srtConfig.highlightColor, gap=srtConfig.gap)
     else:
         srtString = srtConverter.to_srt_plain_text()
     # Convert to SRT file
@@ -99,4 +100,4 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
 
 
 if __name__ == "__main__":
-    main("reel1.wav", SRTConfig(highlightWord=True, fileFormat="srt"))
+    main("reel1.wav", SRTConfig(highlightWord=True, fileFormat="itt", gap=1))
