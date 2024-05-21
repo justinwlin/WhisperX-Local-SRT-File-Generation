@@ -37,9 +37,7 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
     compute_type = "int8"
     # Language is english
     language_code = "en"
-    model = whisperx.load_model(
-        "small", device, compute_type=compute_type, language=language_code
-    )
+
 
     # Default name for the mono-audio file should be: mono-[audio_file]
     # Get rid of the extension of the audio file
@@ -61,6 +59,9 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
     else:
         # Check if the srt_audio_path exists if not create it
         if not os.path.exists(srt_audio_path):
+            model = whisperx.load_model(
+                "small", device, compute_type=compute_type, language=language_code
+            )
             # Load the audio file
             audio = whisperx.load_audio(audio_file)
             result = model.transcribe(
