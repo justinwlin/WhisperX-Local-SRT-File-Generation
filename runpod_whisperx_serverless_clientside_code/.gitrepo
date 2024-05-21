@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/justinwlin/runpod_whisperx_serverless_clientside_code
+	branch = main
+	commit = 06dc04a599ef8d64320a050dba314503b5d5480a
+	parent = 3e2e0498d5fb58cc9e5da301db3e4d9d16c2f249
+	method = merge
+	cmdver = 0.4.6
