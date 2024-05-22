@@ -136,7 +136,8 @@ def create_video_with_captions_and_audio(
 
 def create_video_with_subtitles(video_path, srt_path, output_path, subtitle_style=None):
     """
-    Creates a video file with subtitles overlaid on top of the original video using customizable styles.
+    Creates a video file with subtitles overlaid on top of the original video using customizable styles,
+    including the original audio.
 
     Parameters:
     video_path (str): Path to the input video file.
@@ -156,33 +157,27 @@ def create_video_with_subtitles(video_path, srt_path, output_path, subtitle_styl
             "Fontsize": "22",  # Font size, in points.
             "Outline": "2",  # Outline thickness, in pixels. Only applicable if BorderStyle is 1.
             "OutlineColour": "&H000000&",  # Semi-transparent blue color with 50% opacity.
-            # "Fontname": "Arial",
-            # "Fontsize": "24",
-            # "PrimaryColour": "&Hffffff&",  # White, in BGR Hex
-            # "SecondaryColour": "&H000000&",  # Black, in BGR Hex
-            # "BorderStyle": "1",  # Outline
-            # "OutlineColour": "&H000000&",  # Black, in BGR Hex
-            # "BackColour": "&H80000000&",  # Semi-transparent black
-            # "Bold": "0",  # Normal weight
-            # "Italic": "0",  # No italic
-            # "Alignment": "5",  # Centered middle
-            # "MarginL": "10",  # Left margin in pixels (optional for fine tuning)
-            # "MarginR": "10",  # Right margin in pixels (optional for fine tuning)
-            # "MarginV": "10",  # Vertical margin from the center (optional for fine tuning)
         }
 
     # Convert the dictionary into the style_options string for the subtitles filter
     style_options = ",".join(f"{key}={value}" for key, value in subtitle_style.items())
 
-    # Load the video and subtitle files
+    # Load the video, subtitle files, and extract the audio from the original video
     video_input = ffmpeg.input(video_path)
+    audio_input = ffmpeg.input(video_path).audio
 
     # Overlay the subtitles on the video with custom styles
     video_with_subtitles = ffmpeg.filter(
         video_input, "subtitles", filename=srt_path, force_style=style_options
     )
 
-    # Output the video with subtitles to a new file
-    ffmpeg.output(video_with_subtitles, output_path, vcodec="libx264").run(
+    # Output the video with subtitles and include the audio track
+    ffmpeg.output(video_with_subtitles, audio_input, output_path, vcodec="libx264", acodec="aac").run(
         overwrite_output=True
     )
+
+create_video_with_subtitles(
+    video_path="/Users/justinwlin/Documents/GitHub/WhisperX-Local-SRT-File-Generation/nocap_video.mov",
+    srt_path="/Users/justinwlin/Documents/GitHub/WhisperX-Local-SRT-File-Generation/srt-reel1.srt",
+    output_path="output_ffmpeg.mp4",
+)

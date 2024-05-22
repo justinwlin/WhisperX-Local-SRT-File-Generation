@@ -3,6 +3,7 @@ import os
 import whisperx
 import json
 
+from FFMPEG_video_helper_functions.create_video_ffmpeg_helper import create_video_with_subtitles
 from WhisperXSRTGenerator.SRTWriter import SRTConverter
 from runpod_whisperx_serverless_clientside_code.runpod_client_helper import convert_to_mono_mp3
 
@@ -103,3 +104,5 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
 
 if __name__ == "__main__":
     main("reel1.wav", SRTConfig(highlightWord=True, fileFormat="srt", gap=1))
+    # Can edit the function / pass in a style config to change the style of it. I use ChatGPT to figure out the best styles and play around with it
+    # create_video_with_subtitles("reel1.mp4", "reel1.wav", "srt-reel1.srt", "output.mp4")
