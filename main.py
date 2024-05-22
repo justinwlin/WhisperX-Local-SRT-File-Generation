@@ -13,7 +13,7 @@ class SRTConfig:
     highlightColor: String - Color of the highlight
     fileFormat: "srt" | "itt" - Format of the file
     '''
-    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "red", fileFormat="srt", gap=3, frame_rate=24):
+    def __init__(self, wordsPerLine = 5, highlightWord = True, highlightColor = "yellow", fileFormat="srt", gap=3, frame_rate=24):
         self.wordsPerLine = wordsPerLine
         self.highlightWord = highlightWord
         self.highlightColor = highlightColor
@@ -86,7 +86,7 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
     # Apply highlight word effect if asked for it
     srtString = ''
     if srtConfig.highlightWord and srtConfig.fileFormat == "srt":
-        srtString = srtConverter.to_srt_highlight_word(color=srtConfig.highlightColor, gap=srtConfig.gap)
+        srtString = srtConverter.to_srt_highlight_word(color=srtConfig.highlightColor)
     elif srtConfig.highlightWord and srtConfig.fileFormat=="itt":
         srtString = srtConverter.to_itt_highlight_word(color=srtConfig.highlightColor, gap=srtConfig.gap)
     else:
@@ -102,4 +102,4 @@ def main(audio_file: str, srtConfig: SRTConfig = SRTConfig()):
 
 
 if __name__ == "__main__":
-    main("reel1.wav", SRTConfig(highlightWord=True, fileFormat="itt", gap=1))
+    main("reel1.wav", SRTConfig(highlightWord=True, fileFormat="srt", gap=1))
