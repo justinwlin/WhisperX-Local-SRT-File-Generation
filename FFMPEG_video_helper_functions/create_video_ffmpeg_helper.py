@@ -132,3 +132,57 @@ def create_video_with_captions_and_audio(
         combined[0], combined[1], output, vcodec="libx264", acodec="aac"
     )
     out_stream.run(overwrite_output=True)
+
+
+def create_video_with_subtitles(video_path, srt_path, output_path, subtitle_style=None):
+    """
+    Creates a video file with subtitles overlaid on top of the original video using customizable styles.
+
+    Parameters:
+    video_path (str): Path to the input video file.
+    srt_path (str): Path to the SRT file containing the subtitles.
+    output_path (str): Path where the output video file will be saved.
+    subtitle_style (dict, optional): Dictionary specifying style options for the subtitles. Default values are provided if None.
+
+    Returns:
+    None
+    """
+    if subtitle_style is None:
+        subtitle_style = {
+            "Alignment": "2",  # Center alignment. Other values: 1 (Left), 3 (Right)
+            "MarginV": "140",  # Vertical margin from the bottom of the video frame, in pixels.
+            "Fontname": "Futura",  # Font name. Other common values: "Arial", "Times New Roman", etc.
+            "BorderStyle": "1",  # Border style. 1 = Outline, 3 = Opaque Box behind the text.
+            "Fontsize": "22",  # Font size, in points.
+            "Outline": "2",  # Outline thickness, in pixels. Only applicable if BorderStyle is 1.
+            "OutlineColour": "&H000000&",  # Semi-transparent blue color with 50% opacity.
+            # "Fontname": "Arial",
+            # "Fontsize": "24",
+            # "PrimaryColour": "&Hffffff&",  # White, in BGR Hex
+            # "SecondaryColour": "&H000000&",  # Black, in BGR Hex
+            # "BorderStyle": "1",  # Outline
+            # "OutlineColour": "&H000000&",  # Black, in BGR Hex
+            # "BackColour": "&H80000000&",  # Semi-transparent black
+            # "Bold": "0",  # Normal weight
+            # "Italic": "0",  # No italic
+            # "Alignment": "5",  # Centered middle
+            # "MarginL": "10",  # Left margin in pixels (optional for fine tuning)
+            # "MarginR": "10",  # Right margin in pixels (optional for fine tuning)
+            # "MarginV": "10",  # Vertical margin from the center (optional for fine tuning)
+        }
+
+    # Convert the dictionary into the style_options string for the subtitles filter
+    style_options = ",".join(f"{key}={value}" for key, value in subtitle_style.items())
+
+    # Load the video and subtitle files
+    video_input = ffmpeg.input(video_path)
+
+    # Overlay the subtitles on the video with custom styles
+    video_with_subtitles = ffmpeg.filter(
+        video_input, "subtitles", filename=srt_path, force_style=style_options
+    )
+
+    # Output the video with subtitles to a new file
+    ffmpeg.output(video_with_subtitles, output_path, vcodec="libx264").run(
+        overwrite_output=True
+    )
