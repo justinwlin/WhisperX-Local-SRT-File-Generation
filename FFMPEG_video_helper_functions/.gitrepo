@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/justinwlin/FFMPEG_video_helper_functions.git
+	branch = master
+	commit = 6ae39f0ffae92e16658b60361baa18deca25e7dd
+	parent = 17f35e58da3143b33c2946641cd1ab42716031cf
+	method = merge
+	cmdver = 0.4.6
